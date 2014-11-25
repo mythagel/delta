@@ -8,4 +8,4 @@ module rod(l, r) {
     }
 }
 
-// rod(300, 4);
+rod(300, 4);
