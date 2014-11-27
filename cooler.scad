@@ -23,7 +23,7 @@ module cooler_top() {
 }
 
 module cooler_body() {
-	height = (21*1.61) - 12;
+	height = 30 - 12;
 	difference() {
 		cylinder(r=21/2, h=height);
 		translate([0, 0, -0.5]) cylinder(r=2.5, h=height+1);
@@ -55,7 +55,7 @@ module cooler_base() {
 }
 
 module cooler() {
-	height = (21*1.61) - 12;
+	height = 30 - 12;
 	union() {
 		translate([0, 0, height+6]) cooler_top();
 		translate([0, 0, 6]) cooler_body();
