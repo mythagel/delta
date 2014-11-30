@@ -1,9 +1,10 @@
+use <colours.scad>
 
 $fn=32;
 
 module cooler_top() {
 	
-	difference() {
+	color(al) difference() {
 		cylinder(r=21/2, h=6);
 		translate([0, 0, -0.5]) cylinder(r=2.5, h=7);
 
@@ -24,7 +25,7 @@ module cooler_top() {
 
 module cooler_body() {
 	height = 30 - 12;
-	difference() {
+	color(al) difference() {
 		cylinder(r=21/2, h=height);
 		translate([0, 0, -0.5]) cylinder(r=2.5, h=height+1);
 
@@ -36,7 +37,7 @@ module cooler_body() {
 }
 
 module cooler_base() {
-	difference() {
+	color(al) difference() {
 		cylinder(r=21/2, h=6);
 		translate([0, 0, -0.5]) cylinder(r=2.5, h=7);
 
