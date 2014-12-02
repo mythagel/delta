@@ -2,7 +2,7 @@ use <base.scad>
 use <rod.scad>
 use <rod_support.scad>
 
-translate([0,0,5]) base();
+translate([0,0,12]) base();
 
 t = 10;
 r=270/2;
@@ -14,7 +14,7 @@ r4 = [r * cos(240-t), r * sin(240-t), 0];
 r5 = [r * cos(240+t), r * sin(240+t), 0];
 
 module rod_with_supports() {
-	rotate([180,0,0]) translate([0,0,-350]) rod_support();
+	translate([0,0,350-12]) rod_support();
 	rod(350, 4);
 	rod_support();
 }
@@ -26,4 +26,4 @@ translate(r3) rod_with_supports();
 translate(r4) rod_with_supports();
 translate(r5) rod_with_supports();
 
-translate([0, 0, 350-6-5]) base();
+translate([0, 0, 350-12-6]) base();
