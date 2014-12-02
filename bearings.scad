@@ -9,7 +9,7 @@ module lm8uu() {
     }
     color(steel) render() difference() {
         cylinder(h=24, r=7.5);
-        cylinder(h=25, r=4);
+        translate([0, 0, -0.5]) cylinder(h=25, r=4);
         translate([0, 0, 3.25-1.1]) groove();
         translate([0, 0, 24-3.25]) groove();
     }
