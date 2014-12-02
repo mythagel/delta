@@ -19,8 +19,8 @@ module lm8uu() {
 module 608zz() {
 	$fn = 32;
 	difference() {
-		cylinder(h=7, r=22/2);
-		translate([0, 0, -0.5]) cylinder(h=8, r=4);
+		cylinder(h=7, r=22/2, center=true);
+		cylinder(h=8, r=4, center=true);
 	}
 }
 
