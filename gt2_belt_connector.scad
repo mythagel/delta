@@ -15,7 +15,7 @@ module belt_connector_b() {
 		translate([-0.5,24/2,7/2]) rotate([0,90,0]) cylinder(r=1.5, h=4);
 		translate([3.001,24/2,7/2]) rotate([0,-90,0]) MetricHexSocketCountersunkHeadScrew(key="M3", l=6, part_mode="default");
 		for ( y = [0 : 2 : 24] ) {
-			if (y!=12) translate([-1+0.75,y,-0.5]) cylinder(r=0.5, h=8);
+			if (y!=12) translate([-0.5,y-0.5,-0.5]) cube([0.75+0.5, 1, 8]);
 		}
 	}
 }
