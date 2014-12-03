@@ -1,7 +1,6 @@
 use <bolts/BOLTS.scad>
 
 module belt_idler() {
-	$fn = 32;
 	module bearing_mount() {
 		difference() {
 			rotate([90,0,0]) cylinder(h=7, r=22/2, center=true);

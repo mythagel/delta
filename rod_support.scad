@@ -2,8 +2,6 @@ use <colours.scad>
 use <threads.scad>
 
 module rod_support() {
-	$fn=32;
-
 	rod_radius = 4;
 	r = rod_radius + 10;
 	h = 12;

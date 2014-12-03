@@ -1,7 +1,5 @@
 use <colours.scad>
 
-$fn=32;
-
 module cooler_top() {
 	
 	color(al) difference() {

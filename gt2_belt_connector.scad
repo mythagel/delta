@@ -10,7 +10,6 @@ module belt_connector_a() {
 }
 
 module belt_connector_b() {
-	$fn=32;
 	difference() {
 		cube([3,24,7]);
 		translate([-0.5,24/2,7/2]) rotate([0,90,0]) cylinder(r=1.5, h=4);

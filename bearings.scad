@@ -1,7 +1,6 @@
 steel = [0.8, 0.8, 0.9];
 
 module lm8uu() {
-	$fn = 32;
    module groove() {
        difference() {
            cylinder(h=1.1, r=7.5);
@@ -17,7 +16,6 @@ module lm8uu() {
 }
 
 module 608zz() {
-	$fn = 32;
 	difference() {
 		cylinder(h=7, r=22/2, center=true);
 		cylinder(h=8, r=4, center=true);

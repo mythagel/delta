@@ -1,7 +1,5 @@
 
 module effector() {
-	$fn=32;
-
 	r = 25;
 
 	a = [r * cos(0), r * sin(0)];
