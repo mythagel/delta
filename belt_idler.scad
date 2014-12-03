@@ -1,11 +1,11 @@
-
+use <bolts/BOLTS.scad>
 
 module belt_idler() {
 	$fn = 32;
 	module bearing_mount() {
 		difference() {
 			rotate([90,0,0]) cylinder(h=7, r=22/2, center=true);
-			rotate([90,0,0]) translate([0, 0, -0.5]) cylinder(h=8, r=3.99, center=true);
+			rotate([90,0,0]) translate([0, 0, -0.5]) cylinder(h=8, r=3.95, center=true);
 		}
 	}
 
@@ -19,6 +19,7 @@ module belt_idler() {
 
 use <bearings.scad>
 
-translate([0,(7+6)/2,0]) rotate([90,0,0]) 608zz();
+translate([0,(7+6)-3,0]) rotate([90,0,0]) RadialBallBearing(key="608", type="shielded, double", part_mode="default");
 belt_idler();
-translate([0,-(7+6)/2,0]) rotate([90,0,0]) 608zz();
+translate([0,-6+3,0]) rotate([90,0,0]) RadialBallBearing(key="608", type="shielded, double", part_mode="default");
+
