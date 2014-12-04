@@ -1,4 +1,3 @@
-use <bolts/BOLTS.scad>
 
 module belt_idler() {
 	module bearing_mount() {
@@ -16,9 +15,4 @@ module belt_idler() {
 	}
 }
 
-use <bearings.scad>
-
-translate([0,(7+6)-3,0]) rotate([90,0,0]) RadialBallBearing(key="608", type="shielded, double", part_mode="default");
 belt_idler();
-translate([0,-6+3,0]) rotate([90,0,0]) RadialBallBearing(key="608", type="shielded, double", part_mode="default");
-
