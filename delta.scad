@@ -1,29 +1,34 @@
+use <local/local.scad>
 use <base.scad>
 use <rod.scad>
 use <rod_support.scad>
+use <effector.scad>
 
 base();
 
-t = 10;
-r=270/2;
-r0 = [r * cos(0-t),   r * sin(0-t),   6];
-r1 = [r * cos(0+t),   r * sin(0+t),   6];
-r2 = [r * cos(120-t), r * sin(120-t), 6];
-r3 = [r * cos(120+t), r * sin(120+t), 6];
-r4 = [r * cos(240-t), r * sin(240-t), 6];
-r5 = [r * cos(240+t), r * sin(240+t), 6];
-
 module rod_with_supports() {
-	translate([0,0,350-12]) rod_support();
+	translate([0,0,350-(12+6)]) rod_support();
 	rod(350, 4);
-	rod_support();
+	translate([0,0,6]) rod_support();
 }
 
-translate(r0) rod_with_supports();
-translate(r1) rod_with_supports();
-translate(r2) rod_with_supports();
-translate(r3) rod_with_supports();
-translate(r4) rod_with_supports();
-translate(r5) rod_with_supports();
+r0_cs = base_conn(0);
+r1_cs = base_conn(1);
+r2_cs = base_conn(2);
+r3_cs = base_conn(3);
+r4_cs = base_conn(4);
+r5_cs = base_conn(5);
+rod_cs = rod_conn("bottom", 350, 4);
 
-translate([0, 0, 350+6]) base();
+align(rod_cs, r0_cs) rod_with_supports();
+align(rod_cs, r1_cs) rod_with_supports();
+align(rod_cs, r2_cs) rod_with_supports(); 
+align(rod_cs, r3_cs) rod_with_supports();
+align(rod_cs, r4_cs) rod_with_supports();
+align(rod_cs, r5_cs) rod_with_supports();
+
+translate([0, 0, 350-6]) base();
+
+
+translate([0,0,100+6]) rotate([0,0,30]) effector(true);
+
