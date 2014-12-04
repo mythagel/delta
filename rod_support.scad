@@ -3,7 +3,7 @@ use <threads.scad>
 
 module rod_support() {
 	rod_radius = 4;
-	r = rod_radius + 10;
+	r = rod_radius + 6;
 	h = 12;
 	hole_center = rod_radius + (r-rod_radius)/2;
 
