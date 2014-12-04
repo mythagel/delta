@@ -1,5 +1,5 @@
 
-module effector() {
+module effector(balls) {
 	r = 18;
 	a = [r * cos(0), r * sin(0)];
 	b = [r * cos(60), r * sin(60)];
@@ -21,12 +21,15 @@ module effector() {
 	d0 = [r0 * cos(180), r0 * sin(180),5];
 	e0 = [r0 * cos(240), r0 * sin(240),5];
 	f0 = [r0 * cos(300), r0 * sin(300),5];
-	translate(a0) sphere(r=2.5);
-	translate(b0) sphere(r=2.5);
-	translate(c0) sphere(r=2.5);
-	translate(d0) sphere(r=2.5);
-	translate(e0) sphere(r=2.5);
-	translate(f0) sphere(r=2.5);
+
+	if(balls) {
+		translate(a0) sphere(r=2.5);
+		translate(b0) sphere(r=2.5);
+		translate(c0) sphere(r=2.5);
+		translate(d0) sphere(r=2.5);
+		translate(e0) sphere(r=2.5);
+		translate(f0) sphere(r=2.5);
+	}
 }
 
-effector();
+effector(true);
