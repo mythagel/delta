@@ -1,5 +1,5 @@
 use <colours.scad>
-use <local/local.scad>
+use <local.scad>
 
 r = 200/2;	// radius
 segment_length = 30;

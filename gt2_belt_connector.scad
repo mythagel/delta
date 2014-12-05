@@ -1,5 +1,5 @@
 use <threads.scad>
-use <bolts/BOLTS.scad>
+use <BOLTS.scad>
 
 module belt_connector_a() {
 	difference() {

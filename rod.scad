@@ -1,4 +1,4 @@
-use <local/local.scad>
+use <local.scad>
 use <colours.scad>
 
 module rod(l, r) {

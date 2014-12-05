@@ -1,5 +1,5 @@
 use <threads.scad>
-use <local/local.scad>
+use <local.scad>
 
 h = 16;
 

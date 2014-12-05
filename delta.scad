@@ -1,4 +1,4 @@
-use <local/local.scad>
+use <local.scad>
 use <base.scad>
 use <rod.scad>
 use <rod_support.scad>
