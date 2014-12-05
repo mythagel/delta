@@ -2,18 +2,21 @@ use <BOLTS.scad>
 use <bearing_block.scad>
 use <belt_idler.scad>
 
-translate([20,3,(-23/2)-2]) rotate([0,0,90]) bearing_block();
+module idler_assy() {
+	bearing_cs = bearing_block_conn("bearing");
+	bb_cs = new_cs(origin=[0,0,0], axes=[[0,0,1],[0,1,0]]);
+	idler_a_cs = belt_idler_conn("a");
+	idler_b_cs = belt_idler_conn("b");
 
-translate([0,(7+6)-3,0]) rotate([90,0,0]) RadialBallBearing(key="608", type="shielded, double", part_mode="default");
-belt_idler();
-translate([0,-6+3,0]) rotate([90,0,0]) RadialBallBearing(key="608", type="shielded, double", part_mode="default");
+	belt_idler();
+	align(bb_cs, idler_a_cs)
+		RadialBallBearing(key="608", type="open", part_mode="default");
+	align(bearing_cs, idler_a_cs)
+		bearing_block();
+	align(bb_cs, idler_b_cs)
+		RadialBallBearing(key="608", type="open", part_mode="default");
+	align(bearing_cs, idler_b_cs)
+		bearing_block();
+}
 
-translate([-20,-3,(-23/2)-2]) rotate([0,0,-90]) bearing_block();
-
-
-//bearing_cs = bearing_block_conn("bearing");
-
-//RadialBallBearing_conn(location,key="608", type="open", part_mode="default");
-//bb_cs = new_cs(origin=[0,0,0], axes=[[0,0,1],[0,1,0]]);
-
-//align(bb_cs, bearing_cs) RadialBallBearing(key="608", type="open", part_mode="default");
+idler_assy();
