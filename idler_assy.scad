@@ -8,15 +8,17 @@ module idler_assy() {
 	idler_a_cs = belt_idler_conn("a");
 	idler_b_cs = belt_idler_conn("b");
 
-	belt_idler();
-	align(bb_cs, idler_a_cs)
-		RadialBallBearing(key="608", type="open", part_mode="default");
-	align(bearing_cs, idler_a_cs)
-		bearing_block();
-	align(bb_cs, idler_b_cs)
-		RadialBallBearing(key="608", type="open", part_mode="default");
-	align(bearing_cs, idler_b_cs)
-		bearing_block();
+	translate([0,0,16]) union() {
+		belt_idler();
+		align(bb_cs, idler_a_cs)
+			RadialBallBearing(key="608", type="open", part_mode="default");
+		align(bearing_cs, idler_a_cs)
+			bearing_block();
+		align(bb_cs, idler_b_cs)
+			RadialBallBearing(key="608", type="open", part_mode="default");
+		align(bearing_cs, idler_b_cs)
+			bearing_block();
+	}
 }
 
 idler_assy();
