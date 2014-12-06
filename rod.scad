@@ -1,5 +1,5 @@
 use <local.scad>
-use <colours.scad>
+include <colours.scad>
 
 module rod(l, r) {
     color(steel) render() union() {

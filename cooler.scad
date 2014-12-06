@@ -1,4 +1,4 @@
-use <colours.scad>
+include <colours.scad>
 
 module cooler_top() {
 	
@@ -45,10 +45,9 @@ module cooler_base() {
 		translate([0, -6, -0.5]) cylinder(r=2.5, h=5.5);
 
 		difference() {
-			rotate_extrude() translate([3.5, 0, 0]) polygon( points=[[0,0],[5,0],[5,5],[0,5]] );
-			translate([-8.5, 0, 0]) cube(size = [8.5, 8.5, 5]);
-			translate([0, -8.5, 0]) cube(size = [8.5, 8.5, 5]);
-			//cube(size = [8.5, 8.5, 5]);
+			rotate_extrude() translate([3.5, 0, 0]) square(5,5);
+			translate([-8.5, 0, -0.5]) cube(size = [8.5, 8.5, 6]);
+			translate([0, -8.5, -0.5]) cube(size = [8.5, 8.5, 6]);
 		}
 	}
 }
@@ -56,9 +55,9 @@ module cooler_base() {
 module cooler() {
 	height = 30 - 12;
 	union() {
-		translate([0, 0, height+6]) cooler_top();
+		translate([0, 0, height+5.9]) cooler_top();
 		translate([0, 0, 6]) cooler_body();
-		translate([0, 0, 6]) rotate([180, 0, 0]) cooler_base();
+		translate([0, 0, 6.1]) rotate([180, 0, 0]) cooler_base();
 	}
 }
 

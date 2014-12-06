@@ -3,6 +3,7 @@ use <base.scad>
 use <rod.scad>
 use <rod_support.scad>
 use <effector.scad>
+use <idler_assy.scad>
 
 base();
 
@@ -27,8 +28,10 @@ align(rod_cs, r3_cs) rod_with_supports();
 align(rod_cs, r4_cs) rod_with_supports();
 align(rod_cs, r5_cs) rod_with_supports();
 
-translate([0, 0, 350-6]) base();
+translate([85,0,6]) rotate([0,0,90]) idler_assy();
+translate([100*cos(120),100*sin(120),6]) rotate([0,0,30]) idler_assy();
 
+translate([0, 0, 350-6]) base();
 
 translate([0,0,100+6]) rotate([0,0,30]) effector(true);
 

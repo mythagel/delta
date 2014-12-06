@@ -1,4 +1,4 @@
-use <colours.scad>
+include <colours.scad>
 use <threads.scad>
 
 module rod_support() {

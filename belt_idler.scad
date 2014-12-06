@@ -6,7 +6,7 @@ module belt_idler() {
 	module bearing_mount() {
 		difference() {
 			rotate([90,0,0]) cylinder(h=7, r=22/2, center=true);
-			rotate([90,0,0]) translate([0, 0, -0.5]) cylinder(h=8, r=4, center=true);
+			rotate([90,0,0]) translate([0, 0, -0.5]) cylinder(h=8, r=3.9, center=true);
 		}
 	}
 

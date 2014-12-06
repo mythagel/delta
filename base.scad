@@ -1,4 +1,4 @@
-use <colours.scad>
+include <colours.scad>
 use <local.scad>
 
 r = 200/2;	// radius
