@@ -1,6 +1,7 @@
 use <threads.scad>
 use <local.scad>
 
+$fn=32;
 h = 16;
 d = 8;
 
