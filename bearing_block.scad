@@ -2,7 +2,7 @@ use <threads.scad>
 use <local.scad>
 
 $fn=32;
-h = 16;
+h = 12;
 d = 8;
 
 module bearing_block() {	
@@ -17,8 +17,8 @@ module bearing_block() {
 			translate([0,-0.5,h]) rotate([90,0,0]) cylinder(r=11, h=7.5, center=true);
 		}
 
-		translate([-8,0,0]) metric_thread(3, 0.8, 10, internal=true);
-		translate([8,0,0]) metric_thread(3, 0.8, 10, internal=true);
+		translate([-8,0,0]) metric_thread(5, 0.8, 10, internal=true);
+		translate([8,0,0]) metric_thread(5, 0.8, 10, internal=true);
 	}
 }
 

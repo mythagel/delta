@@ -1,10 +1,25 @@
 include <colours.scad>
 use <local.scad>
 
-r = 264/2;	// radius
-segment_length = 30;
+base_diameter=264;
+r = base_diameter/2;	// radius
+segment_length = 50;
 tower_distance = segment_length-3;
 tower_inset = 12;
+
+/* edge length of printable square area
+ * The actual printable area is the circle
+ * that bounds this square. */
+print_size=120;
+// Radius of the printable area
+print_radius = sqrt(pow(print_size,2)+pow(print_size,2))/2;
+
+approx_arm_length = (r - tower_inset) + print_radius;
+echo("approx_arm_length", approx_arm_length);
+approx_z_travel = 350-approx_arm_length;
+echo("approx_z_travel", approx_z_travel);
+
+echo("print_diameter", print_radius*2);
 
 /* Variables for firmware */
 /*  =========== Parameter essential for delta calibration ===================
@@ -22,8 +37,6 @@ tower_inset = 12;
                                      |-----------| PRINTER_RADIUS
 */
 
-//DELTA_DIAGONAL_ROD = ;
-
 DELTA_ALPHA_A = 210;
 DELTA_ALPHA_B = 330;
 DELTA_ALPHA_C = 90;
@@ -31,7 +44,11 @@ DELTA_ALPHA_C = 90;
 //DELTA_MAX_RADIUS = ?!?!?;
 
 //END_EFFECTOR_HORIZONTAL_OFFSET = 33;
+// AKA effector radius
+
 //CARRIAGE_HORIZONTAL_OFFSET = 18;
+
+DELTA_DIAGONAL_ROD = (((r - tower_inset)+print_radius) - (CARRIAGE_HORIZONTAL_OFFSET+END_EFFECTOR_HORIZONTAL_OFFSET)) + 10/*tolerance*/;
 
 PRINTER_RADIUS = r - tower_inset;
 
@@ -89,14 +106,8 @@ function base_conn(conn) =
 	"Error unknown connection";
 
 
-/* edge length of printable square area
- * The actual printable area is the circle
- * that bounds this square. */
-print_size=120;
-color([0, 0, 1]) translate([0, 0, 8]) linear_extrude(height=0.6) square(print_size, center=true);
 
-// Radius of the printable area
-print_radius = sqrt(pow(print_size,2)+pow(print_size,2))/2;
+color([0, 0, 1]) translate([0, 0, 8]) linear_extrude(height=0.6) square(print_size, center=true);
 color([1, 0, 0]) translate([0, 0, 8]) linear_extrude(height=0.5) circle(print_radius);
 color([0, 1, 0]) translate([0, 0, 0.1]) linear_extrude(height=0.6) circle(r);
 

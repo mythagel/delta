@@ -33,5 +33,5 @@ translate([100*cos(120),100*sin(120),6]) rotate([0,0,30]) idler_assy();
 
 translate([0, 0, 350-6]) base();
 
-translate([0,0,100+6]) rotate([0,0,30]) effector(true);
+translate([0,0,120+6]) rotate([0,0,30]) effector(true);
 
