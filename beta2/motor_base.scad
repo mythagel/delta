@@ -16,16 +16,17 @@ difference() {
 		cylinder(r=2, h=10, center=true, $fn=12);
 	}
 
-	translate([(width/2)-5, 0, -25]) cylinder(r=4, h=25);
-	translate([5-(width/2), 0, -25]) cylinder(r=4, h=25);
+// rod holes
+	translate([(width/2)-5, 0, 0]) cylinder(r=4, h=25);
+	translate([5-(width/2), 0, 0]) cylinder(r=4, h=25);
 
 // motor center
 	translate([0,-1,0]) rotate([90,0,0]) cylinder(r=11, h=10, center=true);
 
 }
 
-translate([0,-2,0]) rotate([90,90,0]) nema17();
+translate([0,-5,0]) rotate([270,0,0]) nema17();
 
 // rods
-translate([(width/2)-5, 0, -300]) cylinder(r=4, h=300);
-translate([5-(width/2), 0, -300]) cylinder(r=4, h=300);
+translate([(width/2)-5, 0, 0]) cylinder(r=4, h=300);
+translate([5-(width/2), 0, 0]) cylinder(r=4, h=300);
