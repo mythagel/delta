@@ -1,6 +1,8 @@
 use <../nema17.scad>
 use <motor_mount.scad>
 use <carriage.scad>
+use <lower_mount.scad>
+
 use <../bearings.scad>
 use <gt2_pulley.scad>
 
@@ -11,6 +13,7 @@ d=17;
 w=42;
 h=42;
 carriage_h=24;
+lower_mount_h=24;
 
 motor_mount(d, w, h);
 rotate([0,90,0]) nema17();
@@ -21,3 +24,5 @@ translate([0,0,-40]) union() {
 	translate([d/2,w/2 - (15/2) - 1,-24/2]) lm8uu();
 	translate([d/2,-w/2 + (15/2) + 1,-24/2]) lm8uu();
 }
+
+translate([0,0,-80]) lower_mount(d, w, lower_mount_h);
