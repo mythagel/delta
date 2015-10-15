@@ -4,13 +4,16 @@ module motor_mount(d, w, h) {
 	translate([0,-w/2,-h/2]) difference() {
 		cube([d,w,h]);
 
+			// see inside!
+			//translate([d-1.5,w/2,h/2]) rotate([0,90,0]) cylinder(h=10, r=40, center=true);
+
 		// rod support
 		union() {
 			// 8mm rod, m6 internal thread
-			translate([d/2,0+((15/2)+1),-1]) cylinder(r=4, h=15+1);
+			translate([d/2,0+((15/2)+1),-1]) cylinder(r=4, h=20+1);
 			translate([d/2,0+((15/2)+1),-1]) cylinder(r=3, h=42+2);
 
-			translate([d/2,w-((15/2)+1),-1]) cylinder(r=4, h=15+1);
+			translate([d/2,w-((15/2)+1),-1]) cylinder(r=4, h=20+1);
 			translate([d/2,w-((15/2)+1),-1]) cylinder(r=3, h=42+2);
 		}
 
