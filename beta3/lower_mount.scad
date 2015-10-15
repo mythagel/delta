@@ -8,7 +8,7 @@ module lower_mount(d, w, h) {
 			cube([d,w,h]);
 
 			// see inside!
-			//translate([d-1.5,w/2,h/2]) rotate([0,90,0]) cylinder(h=8, r=22/2, center=true);
+			//translate([d-1.5,w/2,h/2]) rotate([0,90,0]) cylinder(h=8, r=40, center=true);
 
 
 			// axel hole
@@ -17,13 +17,14 @@ module lower_mount(d, w, h) {
 
 			// belt clearance
 			// 4mm end mill cutting 14mm deep?
-			translate([d/2,w/2,h-(10/2)]) roundedBox([8, 14, 14], 4/2, true);
+			translate([d/2,w/2,h-(8/2)]) roundedBox([8, 12, 12], 4/2, true);
 
-			translate([d/2,0+((15/2)+1),5]) cylinder(r=4, h=h+1);
-			translate([d/2,w-((15/2)+1),5]) cylinder(r=4, h=h+1);
+			translate([d/2,0+((15/2)+1),4]) cylinder(r=4, h=h+1);
+			translate([d/2,w-((15/2)+1),4]) cylinder(r=4, h=h+1);
 		}
 		
-		translate([d/2,w/2,h-5]) rotate([0,90,0]) cylinder(h=7, r=10/2, center=true);
+		//idler
+		translate([d/2,w/2,h-(8/2)]) rotate([0,90,0]) cylinder(h=7, r=8/2, center=true);
 	}
 }
 
