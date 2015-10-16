@@ -1,4 +1,5 @@
 use <../bearings.scad>
+include <gt2_belt.scad>
 use <../boxes.scad>
 
 module lower_mount(d, w, h) {
@@ -10,21 +11,21 @@ module lower_mount(d, w, h) {
 			// see inside!
 			//translate([d-1.5,w/2,h/2]) rotate([0,90,0]) cylinder(h=8, r=40, center=true);
 
-
-			// axel hole
+			// axle
 			translate([d/2,w/2,h-5]) rotate([0,90,0]) cylinder(h=d+2, r=1, center=true);
 
+			// belt clearance milled by 5/32" bit
+			translate([d-(gt2_belt_width/2), w/2, h-(8/2)])
+				rotate([0,90,0])
+					roundedBox([12, 10, gt2_belt_width+2], 3.96875/2, true);
 
-			// belt clearance
-			// 4mm end mill cutting 14mm deep?
-			translate([d/2,w/2,h-(8/2)]) roundedBox([8, 12, 12], 4/2, true);
-
+			// rod support
 			translate([d/2,0+((15/2)+1),4]) cylinder(r=4, h=h+1);
 			translate([d/2,w-((15/2)+1),4]) cylinder(r=4, h=h+1);
 		}
 		
 		//idler
-		translate([d/2,w/2,h-(8/2)]) rotate([0,90,0]) cylinder(h=7, r=8/2, center=true);
+		translate([d-(7/2),w/2,h-5]) rotate([0,90,0]) cylinder(h=7, r=6.5/2, center=true);
 	}
 }
 
