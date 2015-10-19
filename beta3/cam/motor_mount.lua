@@ -4,28 +4,44 @@ d=17;
 w=42;
 h=42;
 
-cam.tool(2)
 
--- 5.5 = Nema17 motor mount offset
-move_to(5.5, 5.5, 0);
+op=argv[2];
 
-for i = 1, 4 do
-    cam.peck_drill(d+1, 1, 50)
-    move(31); turn(90);
-end
+-- op 0
+if op == nil or op == "0" then
+    cam.tool(2)
 
-cam.tool(8); tool_r = 8/2;
-move_to(42/2, 42/2, 0);
-cam.helical_plunge((16/2) - tool_r, d+1, 0.5, 50);
-move_to(nil, nil, 0);
+    -- 5.5 = Nema17 motor mount offset
+    move_to(5.5, 5.5, 0);
 
-turn_to(90)
-move_to((42/2)-((16/2)-tool_r), 0, nil)
+    for i = 1, 4 do
+        cam.peck_drill(d+1, 1, 50)
+        move(31); turn(90);
+    end
 
-for i = 1, 7 do
-    cam.rectangle((42/2), 16-(tool_r*2), -1, 50);
-    if i < 7 then
-        cam.plunge(1, 50)
+    cam.tool(8); tool_r = 8/2;
+    move_to(42/2, 42/2, 0);
+    cam.helical_plunge((16/2) - tool_r, d+1, 0.5, 50);
+    move_to(nil, nil, 0);
+
+    turn_to(90)
+    move_to((42/2)-((16/2)-tool_r), 0, nil)
+
+    for i = 1, 7 do
+        cam.rectangle((42/2), 16-(tool_r*2), -1, 50);
+        if i < 7 then
+            cam.plunge(1, 50)
+        end
     end
 end
 
+-- stock rotated to machine from base
+if op == "1" then
+    cam.tool(3)
+
+    move_to(d/2, 0+((15/2)+1), 0);
+    cam.peck_drill(d+1, 1, 50);
+
+    move_to(d/2, w-((15/2)+1), 0);
+    cam.peck_drill(d+1, 1, 50);
+end
