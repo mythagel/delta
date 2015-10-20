@@ -5,6 +5,8 @@ w=42;
 h=42;
 
 
+-- y, x, z???
+
 op=argv[2];
 
 -- op 0
@@ -39,9 +41,9 @@ end
 if op == "1" then
     cam.tool(3)
 
-    move_to(d/2, 0+((15/2)+1), 0);
-    cam.peck_drill(d+1, 1, 50);
+    move_to(0+((15/2)+1), d/2, 0);
+    cam.peck_drill(h+1, 1, 50);
 
-    move_to(d/2, w-((15/2)+1), 0);
-    cam.peck_drill(d+1, 1, 50);
+    move_to(w-((15/2)+1), d/2, 0);
+    cam.peck_drill(h+1, 1, 50);
 end
