@@ -11,10 +11,14 @@ module motor_mount(d, w, h) {
 		union() {
 			// 8mm rod, m6 internal thread
 			translate([d/2,0+((15/2)+1),-1]) cylinder(r=4, h=20+1);
-			translate([d/2,0+((15/2)+1),-1]) cylinder(r=3, h=42+2);
-
 			translate([d/2,w-((15/2)+1),-1]) cylinder(r=4, h=20+1);
-			translate([d/2,w-((15/2)+1),-1]) cylinder(r=3, h=42+2);
+
+			// 6mm through holes for M6 tapped rods
+			// prefer to not have to drill and tap hardened rods
+			//translate([d/2,0+((15/2)+1),-1]) cylinder(r=3, h=42+2);
+			//translate([d/2,w-((15/2)+1),-1]) cylinder(r=3, h=42+2);
+
+			// TODO recessed mounting screws from front or back face.
 		}
 
 		// motor flange clearance (machined from back)
@@ -24,10 +28,17 @@ module motor_mount(d, w, h) {
 
 		// screw thread holes (machined from front)
 		translate([d/2,w/2,h/2]) union() {
+			// through hole for threads
 			translate([0,-31/2,-31/2]) rotate([90,0,90]) cylinder(r=1.5, h=d+2, center=true);
 			translate([0,31/2,-31/2]) rotate([90,0,90]) cylinder(r=1.5, h=d+2, center=true);
 			translate([0,-31/2,31/2]) rotate([90,0,90]) cylinder(r=1.5, h=d+2, center=true);
 			translate([0,31/2,31/2]) rotate([90,0,90]) cylinder(r=1.5, h=d+2, center=true);
+
+			// screw thread clearance
+			translate([3,-31/2,-31/2]) rotate([90,0,90]) cylinder(r=5/2, h=d+1, center=true);
+			translate([3,31/2,-31/2]) rotate([90,0,90]) cylinder(r=5/2, h=d+1, center=true);
+			translate([3,-31/2,31/2]) rotate([90,0,90]) cylinder(r=5/2, h=d+1, center=true);
+			translate([3,31/2,31/2]) rotate([90,0,90]) cylinder(r=5/2, h=d+1, center=true);
 		}
 
 		// belt guide (machined from front)
