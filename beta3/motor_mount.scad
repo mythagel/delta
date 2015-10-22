@@ -29,12 +29,12 @@ module motor_mount(d, w, h) {
 		// screw thread holes (machined from front)
 		translate([d/2,w/2,h/2]) union() {
 			// through hole for threads
-			translate([0,-31/2,-31/2]) rotate([90,0,90]) cylinder(r=1.5, h=d+2, center=true);
-			translate([0,31/2,-31/2]) rotate([90,0,90]) cylinder(r=1.5, h=d+2, center=true);
-			translate([0,-31/2,31/2]) rotate([90,0,90]) cylinder(r=1.5, h=d+2, center=true);
-			translate([0,31/2,31/2]) rotate([90,0,90]) cylinder(r=1.5, h=d+2, center=true);
+			translate([0,-31/2,-31/2]) rotate([90,0,90]) cylinder(r=3/2, h=d+2, center=true);
+			translate([0,31/2,-31/2]) rotate([90,0,90]) cylinder(r=3/2, h=d+2, center=true);
+			translate([0,-31/2,31/2]) rotate([90,0,90]) cylinder(r=3/2, h=d+2, center=true);
+			translate([0,31/2,31/2]) rotate([90,0,90]) cylinder(r=3/2, h=d+2, center=true);
 
-			// screw thread clearance
+			// screw head clearance
 			translate([3,-31/2,-31/2]) rotate([90,0,90]) cylinder(r=5/2, h=d+1, center=true);
 			translate([3,31/2,-31/2]) rotate([90,0,90]) cylinder(r=5/2, h=d+1, center=true);
 			translate([3,-31/2,31/2]) rotate([90,0,90]) cylinder(r=5/2, h=d+1, center=true);
