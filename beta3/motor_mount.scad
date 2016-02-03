@@ -1,5 +1,7 @@
 include <gt2_belt.scad>
 
+bearing_radius=10/2;
+
 module motor_mount(d, w, h) {
 	translate([0,-w/2,-h/2]) difference() {
 		cube([d,w,h]);
@@ -10,13 +12,13 @@ module motor_mount(d, w, h) {
 		// rod support (machined from top)
 		union() {
 			// 8mm rod, m6 internal thread
-			translate([d/2,0+((15/2)+1),-1]) cylinder(r=4, h=20+1);
-			translate([d/2,w-((15/2)+1),-1]) cylinder(r=4, h=20+1);
+			translate([d/2,0+(bearing_radius+1),-1]) cylinder(r=4, h=20+1);
+			translate([d/2,w-(bearing_radius+1),-1]) cylinder(r=4, h=20+1);
 
 			// 6mm through holes for M6 tapped rods
 			// prefer to not have to drill and tap hardened rods
-			//translate([d/2,0+((15/2)+1),-1]) cylinder(r=3, h=42+2);
-			//translate([d/2,w-((15/2)+1),-1]) cylinder(r=3, h=42+2);
+			//translate([d/2,0+(bearing_radius+1),-1]) cylinder(r=3, h=42+2);
+			//translate([d/2,w-(bearing_radius+1),-1]) cylinder(r=3, h=42+2);
 
 			// TODO recessed mounting screws from front or back face.
 		}
