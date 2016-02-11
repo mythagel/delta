@@ -1,4 +1,4 @@
-all: motor_mount.op2.off
+all: motor_mount.off
 
 #motor_mount.off: motor_mount.stock.1.off
 #	cp motor_mount.final... motor_mount.off
@@ -26,3 +26,6 @@ motor_mount.op2.stock: motor_mount.op1.off
 	nc_transform -y -17 -a -90 -b 180 -z -17 -x 42 < motor_mount.op1.off > motor_mount.op2.stock
 motor_mount.op2.off: motor_mount.op2.ngc motor_mount.op2.stock
 	nc_model --stock motor_mount.op2.stock < motor_mount.op2.ngc > motor_mount.op2.off
+
+motor_mount.off: motor_mount.op2.off
+	cp motor_mount.op2.off motor_mount.off
