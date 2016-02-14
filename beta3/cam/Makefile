@@ -1,11 +1,10 @@
-all: motor_mount.off
+all: motor_mount.off lower_mount.off
 
-#motor_mount.off: motor_mount.stock.1.off
-#	cp motor_mount.final... motor_mount.off
+# motor mount
 
 # op 0 - front face
 motor_mount.op0.ngc: motor_mount.op0.lua
-	turtlecam motor_mount.op0.lua 0 > motor_mount.op0.ngc
+	turtlecam motor_mount.op0.lua > motor_mount.op0.ngc
 motor_mount.op0.stock:
 	nc_stock --box -x 42 -y 42 -z -17 > motor_mount.op0.stock
 motor_mount.op0.off: motor_mount.op0.ngc motor_mount.op0.stock
@@ -29,3 +28,25 @@ motor_mount.op2.off: motor_mount.op2.ngc motor_mount.op2.stock
 
 motor_mount.off: motor_mount.op2.off
 	cp motor_mount.op2.off motor_mount.off
+
+
+# lower mount
+
+# op 0 - top face
+lower_mount.op0.ngc: lower_mount.op0.lua
+	turtlecam lower_mount.op0.lua > lower_mount.op0.ngc
+lower_mount.op0.stock:
+	nc_stock --box -x 42 -y 17 -z -24 > lower_mount.op0.stock
+lower_mount.op0.off: lower_mount.op0.ngc lower_mount.op0.stock
+	nc_model --stock lower_mount.op0.stock < lower_mount.op0.ngc > lower_mount.op0.off
+
+# op 1 - bottom face
+lower_mount.op1.ngc: lower_mount.op1.lua
+	turtlecam lower_mount.op1.lua > lower_mount.op1.ngc
+lower_mount.op1.stock: lower_mount.op0.off
+	nc_transform -a 90 -y 24 < lower_mount.op0.off > lower_mount.op1.stock
+lower_mount.op1.off: lower_mount.op1.ngc lower_mount.op1.stock
+	nc_model --stock lower_mount.op1.stock < lower_mount.op1.ngc > lower_mount.op1.off
+
+lower_mount.off: lower_mount.op1.off
+	cp lower_mount.op1.off lower_mount.off
