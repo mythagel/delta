@@ -1,4 +1,6 @@
 all: motor_mount.off lower_mount.off
+clean:
+	rm *.off *.ngc *.stock
 
 # motor mount
 
