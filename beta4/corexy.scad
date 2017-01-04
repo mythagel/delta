@@ -1,5 +1,6 @@
 use <../nema17.scad>
 use <../bearings.scad>
+use <../beta3/gt2_pulley.scad>
 
 module angle(w, h, l, wall) {
     difference() {
@@ -81,9 +82,11 @@ module corexy(x, y) {
     
     y_rail_l = y_width; // 350
     echo("y_rail_l", y_rail_l);
-    y_rail_inset = 20;  // TODO calculate clearance for carriages.
     
-    x_rail_l = (x_width - y_rail_inset*2) - 8; // 350
+    y_rail_inset = 42/2;  // TODO calculate clearance for carriages & motors.
+                          // Currently using nema17 od
+    
+    x_rail_l = (x_width - y_rail_inset*2) - 24/2; // 350
     echo("x_rail_l", x_rail_l);
     
     // frame
@@ -106,26 +109,86 @@ module corexy(x, y) {
     //translate([x_width - y_rail_inset, angle_w/2 + angle_w, rail_z]) rotate([-90,0,0]) rod_clamp();
     //translate([x_width - y_rail_inset, y_width-(angle_w/2 + angle_w), rail_z]) rotate([-90,0,0]) rod_clamp();
     
-    translate([y_rail_inset, x/2 - carriage_width/2- 8/2, rail_z]) rotate([-90,0,0]) lm8uu();
-    translate([y_rail_inset, x/2 + carriage_width/2 - 24 + 8/2, rail_z]) rotate([-90,0,0]) lm8uu();
-    
     // x axis rails
-    translate([y_rail_inset + 4, x/2 - carriage_width/2, rail_z]) rotate([0,90,0]) rod8(x_rail_l);
-    translate([y_rail_inset + 4, x/2 + carriage_width/2, rail_z]) rotate([0,90,0]) rod8(x_rail_l);
+    translate([y_rail_inset + 12/2, x/2 - carriage_width/2, rail_z]) rotate([0,90,0]) rod8(x_rail_l);
+    translate([y_rail_inset + 12/2, x/2 + carriage_width/2, rail_z]) rotate([0,90,0]) rod8(x_rail_l);
+    
+    // testing carriage
+    module y_carriage() {
+        carriage_od = 24;
+        
+        // TODO bearing, rod, & idler mounts
+        translate([8/2, 0, 0]) cube([carriage_od+8, carriage_width + 8*2, carriage_od], center=true);
+        
+        translate([0, 8+8, 0]) rotate([-90,0,0]) lm8uu();
+        translate([0, -24 - 8 -8, 0]) rotate([-90,0,0]) lm8uu();
+        
+        color([0,0,1]) translate([/*idler_id*/12+/*gt2 belt width*/2, carriage_width/2 - /*idler_od*/16/2, carriage_od/2 +/*idler_h*/16]) rotate([180,0,0]) idler();
+        color([1,0,0]) translate([/*idler_id*/12+/*gt2 belt width*/2, -carriage_width/2 + /*idler_od*/16/2, carriage_od/2 + 2]) idler();
+    }
+    translate([y_rail_inset, x/2, rail_z]) y_carriage();
+    translate([y_width-y_rail_inset, x/2, rail_z]) rotate([0,0,180]) y_carriage();
+    
+    // completely fudged....
+    module belts() {
+        module gt2_belt(l) {
+            cube([2, l, 7]);
+        }
+        
+        a_belt_z = 25+7.5;
+        color([1,0,0]) {
+            translate([42/2 + 12/2, 42/2, a_belt_z]) gt2_belt(110);
+            translate([42/2 - 15/2, 42/2, a_belt_z]) gt2_belt(270);
+            translate([42/2 - 15/2, y_width, a_belt_z]) rotate([0,0,-93]) gt2_belt(245);
+            translate([x_width - (42/2 + 15/2), y_width - 16, a_belt_z]) rotate([0,0,180]) gt2_belt(110);
+            translate([y_rail_inset+10, y_width/2 - 11, a_belt_z]) rotate([0,0,-90]) gt2_belt(100);
+            translate([x_width - y_rail_inset - 10, y_width/2 +carriage_width -42, a_belt_z]) rotate([0,0,90]) gt2_belt(100);
+        }
+        
+        b_belt_z = 25+1;
+        color([0,0,1]) {
+            translate([x_width - 42/2 - 7.5, 42/2, b_belt_z]) gt2_belt(110);
+            translate([x_width - 42/2 + 6, 42/2, b_belt_z]) gt2_belt(270);
+            translate([x_width - 42/2 + 6, y_width - 2, b_belt_z]) rotate([0,0,93]) gt2_belt(245);
+            translate([(42/2 + 9), y_width - 16, b_belt_z]) rotate([0,0,180]) gt2_belt(110);
+            translate([y_rail_inset+10, y_width/2 + 19, b_belt_z]) rotate([0,0,-90]) gt2_belt(100);
+            translate([x_width - y_rail_inset - 10, y_width/2 +carriage_width/2 - 42, b_belt_z]) rotate([0,0,90]) gt2_belt(100);
+        }
+    }
+    belts();
+    
+    //testing
+    color([0,0,1]) translate([x_width-y_rail_inset, y_width-/*idler major_d*/16/2, 25+/*idler_h*/16]) rotate([180,0,0]) idler();
+    color([1,0,0]) translate([y_rail_inset, y_width-/*idler major_d*/16/2, 25]) idler();
+    
+    // 16 == idler major_d
+    color([1,0,0]) translate([x_width-y_rail_inset - 16, (y_width-25) + 4, 25]) idler();
+    color([0,0,1]) translate([y_rail_inset + 16, (y_width-25)+4, 25+/*idler_h*/16]) rotate([180,0,0]) idler();
+    
+    color([1,0,0]) translate([42/2, (42/2 + 3), 25+/*motor shaft length*/20]) rotate([0,180,0]) union() {
+        nema17();
+        translate([0,0,20]) rotate([180,0,0]) idler();//gt2_pulley();
+    }
+    color([0,0,1]) translate([x_width - (42/2), (42/2 + 3), 25+/*motor shaft length*/20]) rotate([0,180,0])     union() {
+        nema17();
+        translate([0,0,3]) idler();//gt2_pulley();
+    }
+    
+    
 }
 
 od = 300;
 
 module motors() {
-    translate([43.2/2 + 3, (43.2/2 + 3),od]) rotate([0,180,0]) nema17();
-    translate([od - (43.2/2 + 3), (43.2/2 + 3),od]) rotate([0,180,0]) nema17();
+    translate([42/2 + 3, (42/2 + 3),od]) rotate([0,180,0]) nema17();
+    translate([od - (42/2 + 3), (42/2 + 3),od]) rotate([0,180,0]) nema17();
 }
 
 module heatbed() {
     cube([214, 214, 3]);
 }
 
-frame(od, od, od+75);
+//frame(od, od, od+75);
 translate([3,3,od]) corexy(od, od);
 //motors();
-translate([od/2 - 214/2, od/2 - 214/2, 50]) heatbed();
+//translate([od/2 - 214/2, od/2 - 214/2, 50]) heatbed();
