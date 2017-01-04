@@ -71,6 +71,10 @@ module idler() {
     }
 }
 
+module gt2_belt(l) {
+    cube([2, l, 7]);
+}
+
 module corexy(x, y) {
     carriage_width = 60;
     x_width = x - 6;
@@ -131,9 +135,6 @@ module corexy(x, y) {
     
     // completely fudged....
     module belts() {
-        module gt2_belt(l) {
-            cube([2, l, 7]);
-        }
         
         a_belt_z = 25+7.5;
         color([1,0,0]) {
@@ -187,11 +188,16 @@ frame(od, od, od+75);
 translate([3,3,od - 25]) corexy(od, od);
 
 // testing z motor
-translate([od/2, od - 30, od + 50]) rotate([-90,0,0]) union () {
-    nema17();
-    translate([0,0,3]) idler();//gt2_pulley();
+union() {
+    translate([od/2, od - 30, od + 50]) rotate([-90,0,0]) union () {
+        nema17();
+        translate([0,0,3]) idler();//gt2_pulley();
+    }
+    translate([od/2 - 60, od - 25/2, 0]) rod8(od);
+    translate([od/2 + 60, od - 25/2, 0]) rod8(od);
+    
+    translate([od/2 - 7.5,od - 12,0]) rotate([90,0,0]) gt2_belt(350);
+    translate([od/2 + 5,od - 12,0]) rotate([90,0,0]) gt2_belt(350);
 }
-translate([od/2 - 60, od - 25/2, 0]) rod8(od);
-translate([od/2 + 60, od - 25/2, 0]) rod8(od);
 
 translate([od/2 - 214/2, od/2 - 214/2, 250]) heatbed();
