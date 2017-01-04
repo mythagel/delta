@@ -179,16 +179,19 @@ module corexy(x, y) {
 
 od = 300;
 
-module motors() {
-    translate([42/2 + 3, (42/2 + 3),od]) rotate([0,180,0]) nema17();
-    translate([od - (42/2 + 3), (42/2 + 3),od]) rotate([0,180,0]) nema17();
-}
-
 module heatbed() {
     cube([214, 214, 3]);
 }
 
-//frame(od, od, od+75);
-translate([3,3,od]) corexy(od, od);
-//motors();
-//translate([od/2 - 214/2, od/2 - 214/2, 50]) heatbed();
+frame(od, od, od+75);
+translate([3,3,od - 25]) corexy(od, od);
+
+// testing z motor
+translate([od/2, od - 30, od + 50]) rotate([-90,0,0]) union () {
+    nema17();
+    translate([0,0,3]) idler();//gt2_pulley();
+}
+translate([od/2 - 60, od - 25/2, 0]) rod8(od);
+translate([od/2 + 60, od - 25/2, 0]) rod8(od);
+
+translate([od/2 - 214/2, od/2 - 214/2, 250]) heatbed();
