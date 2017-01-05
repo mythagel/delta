@@ -137,6 +137,14 @@ module corexy(x, y) {
     translate([y_rail_inset, x/2, rail_z]) y_carriage();
     translate([y_width-y_rail_inset, x/2, rail_z]) rotate([0,0,180]) y_carriage();
     
+    module x_carriage() {
+        // TODO groovemount
+        translate([0,0,7.5]) cube([24,75,4], center=true);
+        translate([-12,-30,0]) rotate([0,90,0]) lm8uu();
+        translate([-12,30,0]) rotate([0,90,0]) lm8uu();
+    }
+    translate([od/2, od/2, 12]) x_carriage();
+    
     // completely fudged....
     module belts() {
         
@@ -146,8 +154,8 @@ module corexy(x, y) {
             translate([42/2 - 15/2, 42/2, a_belt_z]) gt2_belt(270);
             translate([42/2 - 15/2, y_width, a_belt_z]) rotate([0,0,-93]) gt2_belt(245);
             translate([x_width - (42/2 + 15/2), y_width - 16, a_belt_z]) rotate([0,0,180]) gt2_belt(110);
-            translate([y_rail_inset+10, y_width/2 - 11, a_belt_z]) rotate([0,0,-90]) gt2_belt(100);
-            translate([x_width - y_rail_inset - 10, y_width/2 +carriage_width -42, a_belt_z]) rotate([0,0,90]) gt2_belt(100);
+            translate([y_rail_inset+10, y_width/2 - 11, a_belt_z]) rotate([0,0,-90]) gt2_belt(115);
+            translate([x_width - y_rail_inset - 10, y_width/2 +carriage_width -42, a_belt_z]) rotate([0,0,90]) gt2_belt(110);
         }
         
         b_belt_z = 25+1;
@@ -156,8 +164,8 @@ module corexy(x, y) {
             translate([x_width - 42/2 + 6, 42/2, b_belt_z]) gt2_belt(270);
             translate([x_width - 42/2 + 6, y_width - 2, b_belt_z]) rotate([0,0,93]) gt2_belt(245);
             translate([(42/2 + 9), y_width - 16, b_belt_z]) rotate([0,0,180]) gt2_belt(110);
-            translate([y_rail_inset+10, y_width/2 + 19, b_belt_z]) rotate([0,0,-90]) gt2_belt(100);
-            translate([x_width - y_rail_inset - 10, y_width/2 +carriage_width/2 - 42, b_belt_z]) rotate([0,0,90]) gt2_belt(100);
+            translate([y_rail_inset+10, y_width/2 + 19, b_belt_z]) rotate([0,0,-90]) gt2_belt(115);
+            translate([x_width - y_rail_inset - 10, y_width/2 +carriage_width/2 - 42, b_belt_z]) rotate([0,0,90]) gt2_belt(110);
         }
     }
     belts();
@@ -201,12 +209,11 @@ module heatbed() {
     cube([214, 214, 3]);
 }
 
-frame(od, od, od+75);
+//frame(od, od, od+75);
 translate([3,3,od - 25]) corexy(od, od);
-translate([3, od - (200+42) - 3, od+25 - 3]) psu();
-
-translate([od/2 + 100, od/2 + 20, od+35]) rotate([0,0,-90]) arduino_ramps();
-translate([200,50,od+62]) rotate([0,0,90]) lcd();
+//translate([3, od - (200+42) - 3, od+25 - 3]) psu();
+//translate([od/2 + 100, od/2 + 20, od+35]) rotate([0,0,-90]) arduino_ramps();
+//translate([200,50,od+62]) rotate([0,0,90]) lcd();
 
 // testing z motor
 union() {
