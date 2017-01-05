@@ -13,6 +13,10 @@ module angle25(l) {
     angle(25, 25, l, 3);
 }
 
+module angle30(l) {
+    angle(30, 30, l, 3);
+}
+
 module rod8(l) {
     cylinder(r=7.89/2, l);
 }
@@ -72,7 +76,7 @@ module idler() {
 }
 
 module gt2_belt(l) {
-    cube([2, l, 7]);
+    cube([2, l, 6]);
 }
 
 module corexy(x, y) {
@@ -96,8 +100,8 @@ module corexy(x, y) {
     // frame
     difference() {
         union() {
-            translate([x_width, 0, 25]) rotate([0,180,0]) angle25(x_width);
-            translate([0, y_width, 25]) rotate([0,180,180]) angle25(x_width);
+            translate([x_width, 0, 25]) rotate([0,180,0]) angle30(x_width);
+            translate([0, y_width, 25]) rotate([0,180,180]) angle30(x_width);
         }
         
         // holes for y axis rails
@@ -180,24 +184,43 @@ module corexy(x, y) {
 
 od = 300;
 
+module psu() {
+    cube([100, 200, 50]);
+}
+
+module arduino_ramps() color([0,0.5,0.5]) {
+    translate([51,-10]) import ("ArduinoMegaBoard.stl");
+    translate([95.3,-8.2,11]) import ("Ramps14_3D.stl");
+}
+
+module lcd() {
+    color([0,0.5,0.5]) include <rrd_graphic_smart_controller.scad>
+}
+
 module heatbed() {
     cube([214, 214, 3]);
 }
 
 frame(od, od, od+75);
 translate([3,3,od - 25]) corexy(od, od);
+translate([3, od - (200+42) - 3, od+25 - 3]) psu();
+
+translate([od/2 + 100, od/2 + 20, od+35]) rotate([0,0,-90]) arduino_ramps();
+translate([200,50,od+62]) rotate([0,0,90]) lcd();
 
 // testing z motor
 union() {
-    translate([od/2, od - 30, od + 50]) rotate([-90,0,0]) union () {
+    translate([od/2, od - 45, od + 50]) rotate([-90,0,0]) union () color([0,1,0]) {
         nema17();
-        translate([0,0,3]) idler();//gt2_pulley();
+        translate([0,0,3+16]) rotate([180,0,0]) idler();//gt2_pulley();
     }
     translate([od/2 - 60, od - 25/2, 0]) rod8(od);
     translate([od/2 + 60, od - 25/2, 0]) rod8(od);
     
-    translate([od/2 - 7.5,od - 12,0]) rotate([90,0,0]) gt2_belt(350);
-    translate([od/2 + 5,od - 12,0]) rotate([90,0,0]) gt2_belt(350);
+    color([0,1,0]) {
+        translate([od/2 - 7.5, od - 35,0]) rotate([90,0,0]) gt2_belt(350);
+        translate([od/2 + 5, od - 35,0]) rotate([90,0,0]) gt2_belt(350);
+    }
 }
 
 translate([od/2 - 214/2, od/2 - 214/2, 250]) heatbed();
