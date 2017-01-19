@@ -92,7 +92,7 @@ module offset_idler() {
 module idler_pulley() {
     minor_d = 12;
     major_d = minor_d + (gt2_belt_height*2);
-    echo("idler_pulley.major_d", major_d);
+    //echo("idler_pulley.major_d", major_d);
     cap_h = 1;
     difference() {
         union () {
@@ -177,6 +177,8 @@ module corexy(x, y) {
     
     carriage_h = 12;
     carriage_depth = 25;
+    carriage_block_width = carriage_width + 6*2;
+    echo("carriage_block_width", carriage_block_width);
     
     // testing carriage
     // TODO need to fix carriages for new belt height
@@ -184,22 +186,22 @@ module corexy(x, y) {
         
         // TODO bearing, rod, & idler mounts
         difference() {
-            translate([carriage_depth/2 - 12/2, 0, 0]) cube([carriage_depth, carriage_width + 8*2, carriage_h], center=true);
+            translate([carriage_depth/2 - 12/2, 0, 0]) cube([carriage_depth, carriage_block_width, carriage_h], center=true);
             
             // rod through hold
-            rotate([90,0,0]) cylinder(r = 9/2, h=carriage_width + 8*2 + 1, center=true);
+            rotate([90,0,0]) cylinder(r = 9/2, h=carriage_block_width + 1, center=true);
             
             // bushing mounts
-            translate([0,(carriage_width+16)/2-1,0]) rotate([90,0,0]) cylinder(r=5.1, h =10, center=true);
-            translate([0,-(carriage_width+16)/2+1,0]) rotate([90,0,0]) cylinder(r=5.1, h =10, center=true);
+            translate([0,(carriage_block_width)/2-1,0]) rotate([90,0,0]) cylinder(r=5.1, h =10, center=true);
+            translate([0,-(carriage_block_width)/2+1,0]) rotate([90,0,0]) cylinder(r=5.1, h =10, center=true);
             
             // rod mounts
             translate([(carriage_depth-12/2)-20,carriage_width/2,0]) rotate([0,90,0]) cylinder(r=8.1/2, h=30);
             translate([(carriage_depth-12/2)-20,-carriage_width/2,0]) rotate([0,90,0]) cylinder(r=8.1/2, h=30);
         }
         
-        translate([0, -(carriage_width+16)/2 + 5, 0]) rotate([-90,0,0]) bushing();
-        translate([0, (carriage_width+16)/2 - 5, 0]) rotate([-90,0,0]) bushing();
+        translate([0, -(carriage_block_width)/2 + 5, 0]) rotate([-90,0,0]) bushing();
+        translate([0, (carriage_block_width)/2 - 5, 0]) rotate([-90,0,0]) bushing();
         
         color([0,0,1]) translate([/*idler_id*/12+/*gt2 belt width*/2, (carriage_width/2) - 8, 8/2 + 2]) idler_pulley();
         color([1,0,0]) translate([/*idler_id*/12+/*gt2 belt width*/2, -(carriage_width/2) + 8, 8/2 + 2 + 7]) idler_pulley();
@@ -213,7 +215,7 @@ module corexy(x, y) {
 
         x_carriage_w = 25;
         difference() {
-            translate([0,0,0]) cube([x_carriage_w,carriage_width+8*2,carriage_h], center=true);
+            translate([0,0,0]) cube([x_carriage_w,carriage_block_width,carriage_h], center=true);
 
             translate([0, -carriage_width/2, 0]) rotate([0,90,0]) cylinder(r=9/2, h=40, center=true);
             translate([0, carriage_width/2, 0]) rotate([0,90,0]) cylinder(r=9/2, h=40, center=true);
@@ -318,17 +320,17 @@ module z_platform() {
 }
 
 union () {
-    frame(od, od, od+75);
-    translate([3,3,od - 25]) corexy(od, od);
-    translate([3,3, 40]) lower_frame(od, od);
-    translate([3, od - (200+42) - 3, 3]) psu();
+    //frame(od, od, od+75);
+    translate([3,3,od - 25]); corexy(od, od);
+    //translate([3,3, 40]) lower_frame(od, od);
+    //translate([3, od - (200+42) - 3, 3]) psu();
 
     //translate([od/2 + 100, od/2 + 20, od+35]) rotate([0,0,-90]) arduino_ramps();
     //translate([200,50,od+62]) rotate([0,0,90]) lcd();
 
-    z_platform();
+    //z_platform();
 
-    translate([od/2 - 214/2, od/2 - 214/2, od - z_position - 30]) heatbed();
+    //translate([od/2 - 214/2, od/2 - 214/2, od - z_position - 30]) heatbed();
 }
 
 
