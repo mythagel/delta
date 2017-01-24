@@ -24,6 +24,10 @@ module angle30(l) {
     angle(30, 30, l, 3);
 }
 
+module angle40(l) {
+    angle(40, 40, l, 3);
+}
+
 module rod8(l) {
     cylinder(r=7.89/2, l);
 }
@@ -134,6 +138,14 @@ module extruder() {
 }
 
 module corexy(x, y) {
+    all = true;
+    frame = true;
+    rails = false;
+    carriages = false;
+    belts = false;
+    pulleys = false;
+    motors = true;
+
     carriage_width = 36;
     x_width = x - 6;
     y_width = y - 6;
@@ -156,10 +168,14 @@ module corexy(x, y) {
     b_belt_z = rail_z + 8/2 + 3;
     
     // frame
-    %difference() {
+    if (all || frame) color([0.97,0.97,0.97]) difference() {
         union() {
-            translate([x_width, 0, angle_h]) rotate([0,180,0]) angle30(x_width);
-            translate([0, y_width, angle_h]) rotate([0,180,180]) angle30(x_width);
+            difference() {
+                translate([x_width, 0, angle_h]) rotate([0,180,0]) angle40(x_width);
+                translate([42/2, 42/2, angle_h]) cylinder(r=22.1/2, h=10, center=true);
+                translate([x_width-42/2, 42/2, angle_h]) cylinder(r=22.1/2, h=10, center=true);
+            }
+            translate([0, y_width, angle_h]) rotate([0,180,180]) angle40(x_width);
         }
         
         // holes for y axis rails
@@ -168,12 +184,14 @@ module corexy(x, y) {
     }
     
     // y axis rails
-    translate([y_rail_inset, 0, rail_z]) rotate([-90,0,0]) rod8(y_rail_l);
-    translate([x_width - y_rail_inset, 0, rail_z]) rotate([-90,0,0]) rod8(y_rail_l);
-    
-    // x axis rails
-    translate([y_rail_inset + 8/2, y_carriage_position - carriage_width/2, rail_z]) rotate([0,90,0]) rod8(x_rail_l);
-    translate([y_rail_inset + 8/2, y_carriage_position + carriage_width/2, rail_z]) rotate([0,90,0]) rod8(x_rail_l);
+    if (all || rails) union() {
+        translate([y_rail_inset, 0, rail_z]) rotate([-90,0,0]) rod8(y_rail_l);
+        translate([x_width - y_rail_inset, 0, rail_z]) rotate([-90,0,0]) rod8(y_rail_l);
+        
+        // x axis rails
+        translate([y_rail_inset + 8/2, y_carriage_position - carriage_width/2, rail_z]) rotate([0,90,0]) rod8(x_rail_l);
+        translate([y_rail_inset + 8/2, y_carriage_position + carriage_width/2, rail_z]) rotate([0,90,0]) rod8(x_rail_l);
+    }
     
     carriage_h = 12;
     carriage_depth = 25;
@@ -206,8 +224,6 @@ module corexy(x, y) {
         color([0,0,1]) translate([/*idler_id*/12+/*gt2 belt width*/2, (carriage_width/2) - 8, 8/2 + 2]) idler_pulley();
         color([1,0,0]) translate([/*idler_id*/12+/*gt2 belt width*/2, -(carriage_width/2) + 8, 8/2 + 2 + 7]) idler_pulley();
     }
-    translate([y_rail_inset, y_carriage_position, rail_z]) y_carriage();
-    translate([y_width-y_rail_inset, y_carriage_position, rail_z]) rotate([0,0,180]) y_carriage();
     
     module x_carriage() {
         // TODO groovemount
@@ -235,7 +251,13 @@ module corexy(x, y) {
         translate([-(x_carriage_w/2) + 5,carriage_width/2,0]) rotate([0,90,0]) bushing();
         translate([(x_carriage_w/2) - 5,carriage_width/2,0]) rotate([0,90,0]) bushing();
     }
-    translate([x_carriage_position, y_carriage_position, rail_z]) x_carriage();
+    
+    if (all || carriages) {
+        translate([y_rail_inset, y_carriage_position, rail_z]) y_carriage();
+        translate([y_width-y_rail_inset, y_carriage_position, rail_z]) rotate([0,0,180]) y_carriage();
+        
+        translate([x_carriage_position, y_carriage_position, rail_z]) x_carriage();
+    }
     
     // somewhat fudged....
     module belts() {
@@ -257,23 +279,28 @@ module corexy(x, y) {
             translate([x_width - y_rail_inset - 10, y_carriage_position +carriage_width/2 - 23, b_belt_z]) rotate([0,0,90]) gt2_belt(x - x_carriage_position - 40);
         }
     }
-    belts();
     
-    // crossover idlers
-    color([0,0,1]) translate([x_width-y_rail_inset, y_width-/*idler major_d*/16/2 - 4, b_belt_z -1.25]) idler_pulley();
-    color([0,0,1]) translate([y_rail_inset + 16, (y_width-angle_h) + /*idler major_d*/16/2, b_belt_z - 1.25]) idler_pulley();
-    color([1,0,0]) translate([y_rail_inset, y_width-/*idler major_d*/16/2 - 4, a_belt_z - 1.25]) idler_pulley();
-    color([1,0,0]) translate([x_width-y_rail_inset - 16, (y_width-angle_h) + /*idler major_d*/16/2, a_belt_z - 1.25]) idler_pulley();
+    if (all || belts) belts();
+    
+    if (all || pulleys) {
+        // crossover idlers
+        color([0,0,1]) translate([x_width-y_rail_inset, y_width-/*idler major_d*/16/2 - 4, b_belt_z -1.25]) idler_pulley();
+        color([0,0,1]) translate([y_rail_inset + 16, (y_width-angle_h) + /*idler major_d*/16/2, b_belt_z - 1.25]) idler_pulley();
+        color([1,0,0]) translate([y_rail_inset, y_width-/*idler major_d*/16/2 - 4, a_belt_z - 1.25]) idler_pulley();
+        color([1,0,0]) translate([x_width-y_rail_inset - 16, (y_width-angle_h) + /*idler major_d*/16/2, a_belt_z - 1.25]) idler_pulley();
+    }
     
     // Motors sit on top of rail
     // Circle for motor flange must be milled
-    color([1,0,0]) translate([42/2, 42/2, angle_h]) rotate([0,180,0]) union() {
-        nema17();
-        translate([0,0,20]) rotate([180,0,0]) offset_idler();//gt2_pulley();
-    }
-    color([0,0,1]) translate([x_width - (42/2), 42/2, angle_h]) rotate([0,180,0])     union() {
-        nema17();
-        translate([0,0,3]) offset_idler();//gt2_pulley();
+    if (all || motors) {
+        color([1,0,0]) translate([42/2, 42/2, angle_h]) rotate([0,180,0]) union() {
+            nema17();
+            translate([0,0,20]) rotate([180,0,0]) offset_idler();//gt2_pulley();
+        }
+        color([0,0,1]) translate([x_width - (42/2), 42/2, angle_h]) rotate([0,180,0]) union() {
+            nema17();
+            translate([0,0,3]) offset_idler();//gt2_pulley();
+        }
     }
 }
 
@@ -320,8 +347,15 @@ module z_platform() {
 }
 
 union () {
-    //frame(od, od, od+75);
-    translate([3,3,od - 25]); corexy(od, od);
+    all = true;
+    frame = false;
+    corexy = true;
+    
+    echo("frame dimensions: ", od, " x ", od, " x ", od+74);
+    upright_h = (od+74) - 25*2;
+    echo("upright_h", upright_h);
+    if (all || frame) frame(od, od, od+75);
+    if (all || corexy) translate([3,3,od-25]) corexy(od, od);
     //translate([3,3, 40]) lower_frame(od, od);
     //translate([3, od - (200+42) - 3, 3]) psu();
 
