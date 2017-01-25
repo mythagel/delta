@@ -137,14 +137,21 @@ module groove_mount() {
 module extruder() {
 }
 
+module inductive_sensor() {
+    cylinder(r=12/2, h=62);
+}
+
 module corexy(x, y) {
     all = true;
     frame = true;
-    rails = false;
-    carriages = false;
-    belts = false;
+    rails = true;
+    carriages = true;
+    carriage_y = true;
+    carriage_x = true;
+    hotend = false;
+    belts = true;
     pulleys = false;
-    motors = true;
+    motors = false;
 
     carriage_width = 36;
     x_width = x - 6;
@@ -227,8 +234,7 @@ module corexy(x, y) {
     
     module x_carriage() {
         // TODO groovemount
-        translate([0,0,10]) rotate([0,180,0]) e3d();
-
+        
         x_carriage_w = 25;
         difference() {
             translate([0,0,0]) cube([x_carriage_w,carriage_block_width,carriage_h], center=true);
@@ -245,7 +251,21 @@ module corexy(x, y) {
             }
 
             //translate([12.1,-50/2,3]) rotate([0,0,90]) groove_mount();
+            cylinder(r=(16+0.5)/2, h=carriage_h+1, center=true);
         }
+        
+        if (false) {
+            belt_clip_h = carriage_h + 14;
+            echo("belt_clip_h", belt_clip_h);
+            translate([-x_carriage_w/2 - 5/2,0, belt_clip_h/2 - carriage_h/2]) cube([5, 12, belt_clip_h], center=true);
+            translate([x_carriage_w/2 + 5/2,0, belt_clip_h/2 - carriage_h/2]) cube([5, 12, belt_clip_h], center=true);
+        } else {
+            translate([x_carriage_w/2 - (5/2)-1, 8, carriage_h/2]) cylinder(r=5/2, h=14);
+            translate([x_carriage_w/2 - (5/2)-1, -8, carriage_h/2]) cylinder(r=5/2, h=14);
+            translate([-x_carriage_w/2 + (5/2)+1, 8, carriage_h/2]) cylinder(r=5/2, h=14);
+            translate([-x_carriage_w/2 + (5/2)+1, -8, carriage_h/2]) cylinder(r=5/2, h=14);
+        }
+        
         translate([-(x_carriage_w/2) + 5,-carriage_width/2,0]) rotate([0,90,0]) bushing();
         translate([(x_carriage_w/2) - 5,-carriage_width/2,0]) rotate([0,90,0]) bushing();
         translate([-(x_carriage_w/2) + 5,carriage_width/2,0]) rotate([0,90,0]) bushing();
@@ -253,10 +273,21 @@ module corexy(x, y) {
     }
     
     if (all || carriages) {
-        translate([y_rail_inset, y_carriage_position, rail_z]) y_carriage();
-        translate([y_width-y_rail_inset, y_carriage_position, rail_z]) rotate([0,0,180]) y_carriage();
+        if (all || carriage_y) {
+            translate([y_rail_inset, y_carriage_position, rail_z]) y_carriage();
+            translate([y_width-y_rail_inset, y_carriage_position, rail_z]) rotate([0,0,180]) y_carriage();
+        }
         
-        translate([x_carriage_position, y_carriage_position, rail_z]) x_carriage();
+        if (all || carriage_x) translate([x_carriage_position, y_carriage_position, rail_z]) {
+            x_carriage();
+            
+            if (all || hotend) {
+                // hotend
+                translate([0,0,10]) rotate([0,180,0]) e3d();
+                
+                translate([0,-30,-55]) inductive_sensor();
+            }
+        }
     }
     
     // somewhat fudged....
@@ -354,7 +385,7 @@ union () {
     echo("frame dimensions: ", od, " x ", od, " x ", od+74);
     upright_h = (od+74) - 25*2;
     echo("upright_h", upright_h);
-    if (all || frame) frame(od, od, od+75);
+    if (all || frame) %frame(od, od, od+75);
     if (all || corexy) translate([3,3,od-25]) corexy(od, od);
     //translate([3,3, 40]) lower_frame(od, od);
     //translate([3, od - (200+42) - 3, 3]) psu();
