@@ -24,8 +24,8 @@ module angle30(l) {
     angle(30, 30, l, 3);
 }
 
-module angle40(l) {
-    angle(40, 40, l, 3);
+module angle50(l) {
+    angle(50, 50, l, 3);
 }
 
 module rod8(l) {
@@ -165,8 +165,7 @@ module corexy(x, y) {
     y_rail_l = y_width; // 350
     echo("y_rail_l", y_rail_l);
     
-    y_rail_inset = 42/2;  // TODO calculate clearance for carriages & motors.
-                          // Currently using nema17 od
+    y_rail_inset = 42/2;
     
     x_rail_l = 250;
     echo("x_rail_l", x_rail_l);
@@ -178,11 +177,13 @@ module corexy(x, y) {
     if (all || frame) color([0.97,0.97,0.97]) difference() {
         union() {
             difference() {
-                translate([x_width, 0, angle_h]) rotate([0,180,0]) angle40(x_width);
+                translate([x_width, 0, angle_h]) rotate([0,180,0]) angle50(x_width);
+                
+                // Motor mounting holes
                 translate([42/2, 42/2, angle_h]) cylinder(r=22.1/2, h=10, center=true);
                 translate([x_width-42/2, 42/2, angle_h]) cylinder(r=22.1/2, h=10, center=true);
             }
-            translate([0, y_width, angle_h]) rotate([0,180,180]) angle40(x_width);
+            translate([0, y_width, angle_h]) rotate([0,180,180]) angle50(x_width);
         }
         
         // holes for y axis rails
