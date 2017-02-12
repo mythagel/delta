@@ -5,9 +5,11 @@ include <../beta3/gt2_belt.scad>
 use <e3d_v6_all_metall_hotend.scad>
 
 od = 300 + 6;   // ID == 300
+z_width = 120;
+
 y_carriage_position = 220;  // 56 - 244
 x_carriage_position = 220;  //56 - 244
-z_position = 200;
+z_position = 220;    //48 - 220
 
 module angle(w, h, l, wall) {
     difference() {
@@ -93,45 +95,14 @@ module offset_idler() {
     }
 }
 
-module idler_pulley() {
-    minor_d = 12;
-    major_d = minor_d + (gt2_belt_height*2);
-    //echo("idler_pulley.major_d", major_d);
-    cap_h = 1;
-    difference() {
-        union () {
-            cylinder(r=major_d/2, h=cap_h);
-            translate([0,0,cap_h]) cylinder(r=minor_d/2, h=gt2_belt_width + 0.25*2);
-            translate([0,0,gt2_belt_width + 0.25*2 + cap_h]) cylinder(r=major_d/2, h=cap_h);
-        }
-        translate([0,0,-0.5]) cylinder(r=3/2, h=(gt2_belt_width + 0.25*2 + cap_h*2) + 1);
-        translate([0,0,(gt2_belt_width + 0.25*2 + cap_h*2) - 2]) cylinder(r=5/2, h=3);
-    }
+module idler_pulley() translate([0,0,2])
+{
+    f623zz();
+    translate([0,0,4.1]) rotate([180,0,0]) f623zz();
 }
 
 module gt2_belt(l) {
     cube([gt2_belt_height, l, gt2_belt_width]);
-}
-
-module groove_mount() {
-    //https://github.com/josefprusa/Prusa3-vanilla/blob/master/src/groovemount.scad
-    union(){
-        //cube([50,20,6]);
-
-        translate([5,10,0])cylinder(r=3.5,h=3.2);
-        translate([45,10,0])cylinder(r=3.5,h=3.2);
-
-        translate([5,10,3.5])cylinder(r=2,h=3.5);
-        translate([45,10,3.5])cylinder(r=2,h=3.5);
-
-
-        translate([20,10,0])cylinder(r=6.1,h=10);
-        translate([20,10,4.5])cylinder(r=8.5,h=10);
-
-        translate([20-6.1,0,0]) cube([12.2,10,10]);
-
-        translate([20-8.5,0,4.5]) cube([17,10,10]);
-    }
 }
 
 module extruder() {
@@ -141,15 +112,17 @@ module inductive_sensor() {
     cylinder(r=12/2, h=62);
 }
 
+belt_space_od = 13.5;
+
 module corexy(x, y) {
     all = true;
-    frame = true;
+    frame = false;
     rails = true;
     carriages = true;
     carriage_y = true;
-    carriage_x = true;
+    carriage_x = false;
     hotend = false;
-    belts = true;
+    belts = false;
     pulleys = false;
     motors = false;
 
@@ -170,8 +143,8 @@ module corexy(x, y) {
     x_rail_l = 250;
     echo("x_rail_l", x_rail_l);
     
-    a_belt_z =  rail_z + 8/2 + 3 + 7;
-    b_belt_z = rail_z + 8/2 + 3;
+    a_belt_z =  rail_z + 8/2 + 3/*bushing + wall thickness + bearing base*/ + 2/*bearing base + bearing top*/ + 6;
+    b_belt_z = rail_z + 8/2 + 3/*bushing + wall thickness + bearing base*/;
     
     // frame
     if (all || frame) color([0.97,0.97,0.97]) difference() {
@@ -182,6 +155,20 @@ module corexy(x, y) {
                 // Motor mounting holes
                 translate([42/2, 42/2, angle_h]) cylinder(r=22.1/2, h=10, center=true);
                 translate([x_width-42/2, 42/2, angle_h]) cylinder(r=22.1/2, h=10, center=true);
+                
+                // Motor screw holes
+                union() {
+                    translate([5.5,5.5,angle_h]) cylinder(r=4/2, h = 10, center=true);
+                    translate([5.5,5.5+31,angle_h]) cylinder(r=4/2, h = 10, center=true);
+                    translate([5.5+31,5.5+31,angle_h]) cylinder(r=4/2, h = 10, center=true);
+                    translate([5.5+31,5.5,angle_h]) cylinder(r=4/2, h = 10, center=true);
+                }
+                translate([x_width - 42,0,0]) union() {
+                    translate([5.5,5.5,angle_h]) cylinder(r=4/2, h = 10, center=true);
+                    translate([5.5,5.5+31,angle_h]) cylinder(r=4/2, h = 10, center=true);
+                    translate([5.5+31,5.5+31,angle_h]) cylinder(r=4/2, h = 10, center=true);
+                    translate([5.5+31,5.5,angle_h]) cylinder(r=4/2, h = 10, center=true);
+                }
             }
             translate([0, y_width, angle_h]) rotate([0,180,180]) angle50(x_width);
         }
@@ -212,7 +199,7 @@ module corexy(x, y) {
         
         // TODO bearing, rod, & idler mounts
         difference() {
-            translate([carriage_depth/2 - 12/2, 0, 0]) cube([carriage_depth, carriage_block_width, carriage_h], center=true);
+            translate([carriage_depth/2 - (/*rod_d*/8/2 + /*bushing*/1 + /*wall thickness*/1), 0, 0]) cube([carriage_depth, carriage_block_width, carriage_h], center=true);
             
             // rod through hold
             rotate([90,0,0]) cylinder(r = 9/2, h=carriage_block_width + 1, center=true);
@@ -224,18 +211,23 @@ module corexy(x, y) {
             // rod mounts
             translate([(carriage_depth-12/2)-20,carriage_width/2,0]) rotate([0,90,0]) cylinder(r=8.1/2, h=30);
             translate([(carriage_depth-12/2)-20,-carriage_width/2,0]) rotate([0,90,0]) cylinder(r=8.1/2, h=30);
+            
+            // pulley mounting holes (M3 threaded)
+            translate([belt_space_od - /*gt2 belt width*/2, (carriage_width/2) - 8]) cylinder(r=3/2, h=30, center=true);
+            translate([belt_space_od - /*gt2 belt width*/2, -(carriage_width/2) + 8]) cylinder(r=3/2, h=30, center=true);
         }
         
         translate([0, -(carriage_block_width)/2 + 5, 0]) rotate([-90,0,0]) bushing();
         translate([0, (carriage_block_width)/2 - 5, 0]) rotate([-90,0,0]) bushing();
         
-        color([0,0,1]) translate([/*idler_id*/12+/*gt2 belt width*/2, (carriage_width/2) - 8, 8/2 + 2]) idler_pulley();
-        color([1,0,0]) translate([/*idler_id*/12+/*gt2 belt width*/2, -(carriage_width/2) + 8, 8/2 + 2 + 7]) idler_pulley();
+        color([0,0,1]) translate([belt_space_od - /*gt2 belt width*/2, (carriage_width/2) - 8, carriage_h/2]) idler_pulley();
+        
+        // spacer
+        color([1,0,0]) translate([belt_space_od - /*gt2 belt width*/2, -(carriage_width/2) + 8, carriage_h/2]) cylinder(r=10/2, h=7.9);
+        color([1,0,0]) translate([belt_space_od - /*gt2 belt width*/2, -(carriage_width/2) + 8, carriage_h/2 + 8]) idler_pulley();
     }
     
     module x_carriage() {
-        // TODO groovemount
-        
         x_carriage_w = 25;
         difference() {
             translate([0,0,0]) cube([x_carriage_w,carriage_block_width,carriage_h], center=true);
@@ -251,7 +243,6 @@ module corexy(x, y) {
                 translate([-x_carriage_w/2 - 1,carriage_width/2,0]) rotate([0,90,0]) cylinder(r=5.1, h =11);
             }
 
-            //translate([12.1,-50/2,3]) rotate([0,0,90]) groove_mount();
             cylinder(r=(16+0.5)/2, h=carriage_h+1, center=true);
         }
         
@@ -364,39 +355,69 @@ module lower_frame(x, y) {
 }
 
 // testing z motor
-module z_platform() {
-    translate([od/2, od - 45, 42/2+ 3]) rotate([-90,0,0]) union () color([0,1,0]) {
+module z_axis() {
+    angle_h = 3;
+    
+    translate([od/2, 25, 42/2+ 3]) rotate([-90,0,180]) union () color([0,1,0]) {
         nema17();
-        translate([0,0,3+16]) rotate([180,0,0]) offset_idler();//gt2_pulley();
+        translate([0,0,3]) rotate([0,0,0]) offset_idler();//gt2_pulley();
     }
-    translate([od/2 - 60, od - 25/2, 0]) rod8(od);
-    translate([od/2 + 60, od - 25/2, 0]) rod8(od);
+    
+    l = 42;//z_width + 20;
+    translate([od/2 - l/2, 25,3]) union() {
+        // Motor screw holes
+        rotate([90,0,0]) difference() {
+            intersection() {
+                angle50(l);
+                cube([l, 50, 25 - 3]);
+            }
+            
+            translate([(l/2 - 42/2) + 42/2, 42/2, angle_h]) cylinder(r=22.1/2, h=10, center=true);
+            translate([(l/2 - 42/2) + 5.5,5.5,angle_h]) cylinder(r=4/2, h = 10, center=true);
+            translate([(l/2 - 42/2) + 5.5,5.5+31,angle_h]) cylinder(r=4/2, h = 10, center=true);
+            translate([(l/2 - 42/2) + 5.5+31,5.5+31,angle_h]) cylinder(r=4/2, h = 10, center=true);
+            translate([(l/2 - 42/2) + 5.5+31,5.5,angle_h]) cylinder(r=4/2, h = 10, center=true);
+        }
+    }
+    
+    translate([od/2, 3+4, od]) rotate([-90,0,0]) idler_pulley();
+    
+    translate([od/2 - z_width/2, 25/2, 3]) rod8(od);
+    translate([od/2 + z_width/2, 25/2, 3]) rod8(od);
     
     color([0,1,0]) {
-        translate([od/2 - 7.5, od - 35, 42/2]) rotate([90,0,0]) gt2_belt(350);
-        translate([od/2 + 5, od - 35, 42/2]) rotate([90,0,0]) gt2_belt(350);
+        translate([od/2 - 7.5, 15, 42/2]) rotate([90,0,0]) gt2_belt(290);
+        translate([od/2 + 5, 15, 42/2]) rotate([90,0,0]) gt2_belt(290);
     }
 }
 
+module z_platform() {
+    translate([-214/2, -214/2, 0]) heatbed();
+    translate([-z_width/2, -214/2 - 33, -24 + 3]) lm8uu();
+    translate([z_width/2, -214/2 - 33, -24 + 3]) lm8uu();
+}
+
 union () {
-    all = true;
+    all = false;
     frame = false;
     corexy = true;
+    zaxis = false;
     
     echo("frame dimensions: ", od, " x ", od, " x ", od+74);
     upright_h = (od+74) - 25*2;
     echo("upright_h", upright_h);
     if (all || frame) %frame(od, od, od+75);
-    if (all || corexy) translate([3,3,od-25]) corexy(od, od);
+    if (all || corexy) translate([3,3,od]) corexy(od, od);
     //translate([3,3, 40]) lower_frame(od, od);
-    //translate([3, od - (200+42) - 3, 3]) psu();
+    //rotate([0,0,90]) translate([200+3, -200 - 3, 3]) psu();
 
     //translate([od/2 + 100, od/2 + 20, od+35]) rotate([0,0,-90]) arduino_ramps();
     //translate([200,50,od+62]) rotate([0,0,90]) lcd();
 
-    //z_platform();
-
-    //translate([od/2 - 214/2, od/2 - 214/2, od - z_position - 30]) heatbed();
+    if (all || zaxis) {
+        z_axis();
+        translate([od/2, od/2, od - z_position - 30]) z_platform();
+    }
 }
 
 
