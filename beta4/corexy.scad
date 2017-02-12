@@ -115,10 +115,10 @@ module inductive_sensor() {
 belt_space_od = 13.5;
 
 module corexy(x, y) {
-    all = true;
-    frame = false;
-    rails = true;
-    carriages = true;
+    all = false;
+    frame = true;
+    rails = false;
+    carriages = false;
     carriage_y = true;
     carriage_x = false;
     hotend = false;
@@ -213,18 +213,14 @@ module corexy(x, y) {
             translate([(carriage_depth-12/2)-20,-carriage_width/2,0]) rotate([0,90,0]) cylinder(r=8.1/2, h=30);
             
             // pulley mounting holes (M3 threaded)
-            translate([belt_space_od - /*gt2 belt width*/2, (carriage_width/2) - 8]) cylinder(r=3/2, h=30, center=true);
-            translate([belt_space_od - /*gt2 belt width*/2, -(carriage_width/2) + 8]) cylinder(r=3/2, h=30, center=true);
+            translate([belt_space_od - /*gt2 belt width*/2, 0]) cylinder(r=3/2, h=30, center=true);
         }
         
         translate([0, -(carriage_block_width)/2 + 5, 0]) rotate([-90,0,0]) bushing();
         translate([0, (carriage_block_width)/2 - 5, 0]) rotate([-90,0,0]) bushing();
         
-        color([0,0,1]) translate([belt_space_od - /*gt2 belt width*/2, (carriage_width/2) - 8, carriage_h/2]) idler_pulley();
-        
-        // spacer
-        color([1,0,0]) translate([belt_space_od - /*gt2 belt width*/2, -(carriage_width/2) + 8, carriage_h/2]) cylinder(r=10/2, h=7.9);
-        color([1,0,0]) translate([belt_space_od - /*gt2 belt width*/2, -(carriage_width/2) + 8, carriage_h/2 + 8]) idler_pulley();
+        color([0,0,1]) translate([belt_space_od - /*gt2 belt width*/2, 0, carriage_h/2]) idler_pulley();
+        color([1,0,0]) translate([belt_space_od - /*gt2 belt width*/2, 0, carriage_h/2 + 8]) idler_pulley();
     }
     
     module x_carriage() {
@@ -285,21 +281,21 @@ module corexy(x, y) {
     // somewhat fudged....
     module belts() {
         color([1,0,0]) {
-            translate([42/2 + 12/2, 42/2, a_belt_z]) gt2_belt(y_carriage_position - 28);
+            translate([42/2 + 12/2, 42/2, a_belt_z]) gt2_belt(y_carriage_position - 20);
             translate([42/2 - 15/2, 42/2, a_belt_z]) gt2_belt(270);
             translate([42/2 - 15/2, y_width-5, a_belt_z]) rotate([0,0,-92.5]) gt2_belt(245);
-            translate([x_width - (42/2 + 15/2), y_width - 16, a_belt_z]) rotate([0,0,180]) gt2_belt(x - y_carriage_position - 28);
-            translate([y_rail_inset+10, y_carriage_position - 3, a_belt_z]) rotate([0,0,-90]) gt2_belt(x_carriage_position - 35);
-            translate([x_width - y_rail_inset - 10, y_carriage_position +carriage_width -33, a_belt_z]) rotate([0,0,90]) gt2_belt(x - x_carriage_position - 40);
+            translate([x_width - (42/2 + 12/2), y_width - 16, a_belt_z]) rotate([0,0,180]) gt2_belt(x - y_carriage_position - 16);
+            translate([y_rail_inset+10, y_carriage_position + 6, a_belt_z]) rotate([0,0,-90]) gt2_belt(x_carriage_position - 35);
+            translate([x_width - y_rail_inset - 10, y_carriage_position +carriage_width - 43, a_belt_z]) rotate([0,0,90]) gt2_belt(x - x_carriage_position - 40);
         }
         
         color([0,0,1]) {
-            translate([x_width - 42/2 - 7.5, 42/2, b_belt_z]) gt2_belt(y_carriage_position - 28);
+            translate([x_width - 42/2 - 15/2, 42/2, b_belt_z]) gt2_belt(y_carriage_position - 20);
             translate([x_width - 42/2 + 6, 42/2, b_belt_z]) gt2_belt(270);
             translate([x_width - 42/2 + 6, y_width - 5, b_belt_z]) rotate([0,0,92.5]) gt2_belt(245);
-            translate([(42/2 + 9), y_width - 16, b_belt_z]) rotate([0,0,180]) gt2_belt(x - y_carriage_position - 28);
-            translate([y_rail_inset+10, y_carriage_position + 3, b_belt_z]) rotate([0,0,-90]) gt2_belt(x_carriage_position - 35);
-            translate([x_width - y_rail_inset - 10, y_carriage_position +carriage_width/2 - 23, b_belt_z]) rotate([0,0,90]) gt2_belt(x - x_carriage_position - 40);
+            translate([(42/2 + 15/2), y_width - 16, b_belt_z]) rotate([0,0,180]) gt2_belt(x - y_carriage_position - 17);
+            translate([y_rail_inset+10, y_carriage_position -5, b_belt_z]) rotate([0,0,-90]) gt2_belt(x_carriage_position - 35);
+            translate([x_width - y_rail_inset - 10, y_carriage_position +carriage_width/2 - 13, b_belt_z]) rotate([0,0,90]) gt2_belt(x - x_carriage_position - 40);
         }
     }
     
@@ -399,9 +395,9 @@ module z_platform() {
 
 union () {
     all = false;
-    frame = false;
+    frame = true;
     corexy = true;
-    zaxis = false;
+    zaxis = true;
     
     echo("frame dimensions: ", od, " x ", od, " x ", od+74);
     upright_h = (od+74) - 25*2;
