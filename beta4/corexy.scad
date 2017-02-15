@@ -118,9 +118,9 @@ module corexy(x, y) {
     all = false;
     frame = true;
     rails = false;
-    carriages = false;
+    carriages = true;
     carriage_y = true;
-    carriage_x = false;
+    carriage_x = true;
     hotend = false;
     belts = true;
     pulleys = false;
@@ -377,30 +377,28 @@ module z_axis() {
     }
     
     z_insert = 8/2 + 42/2;
-    color([1,0,0]) translate([od/2 - (z_width/2 - z_insert), 3+4+8, od]) rotate([-90,0,0]) idler_pulley();
-    color([0,0,1]) translate([od/2 + (z_width/2 - z_insert), 3+4, od]) rotate([-90,0,0]) idler_pulley();
+    color([0,1,0]) translate([od/2 - (z_width/2 - z_insert), 3+4+8, od]) rotate([-90,0,0]) idler_pulley();
+    color([0,1,0]) translate([od/2 + (z_width/2 - z_insert), 3+4, od]) rotate([-90,0,0]) idler_pulley();
+    color([0,1,0]) translate([od/2 + (z_width/2 - z_insert), 3+4+8, 42/2 + 3]) rotate([-90,0,0]) idler_pulley();
 
-    //color([0,0,1]) translate([od/2 - (z_width/2 - z_insert), 3+4, 42/2 + 3]) rotate([-90,0,0]) idler_pulley();
-    color([1,0,0]) translate([od/2 + (z_width/2 - z_insert), 3+4+8, 42/2 + 3]) rotate([-90,0,0]) idler_pulley();
-
-    color([0,0,1]) translate([od/2 - (z_width/2 - z_insert), 25, 42/2+ 3]) rotate([-90,0,180]) union() {
+    color([0,1,0]) translate([od/2 - (z_width/2 - z_insert), 25, 42/2+ 3]) rotate([-90,0,180]) union() {
         nema17();
         translate([0,0,3]) rotate([0,0,0]) offset_idler();//gt2_pulley();
     }
 
-    translate([od/2 - z_width/2, 25/2, 3]) rod8(od);
-    translate([od/2 + z_width/2, 25/2, 3]) rod8(od);
+    translate([od/2 - z_width/2, 25/2, 3]) rod8(350);
+    translate([od/2 + z_width/2, 25/2, 3]) rod8(350);
     
     module belts() {
         z_belt_l = (260 - z_position) + (30 + z_position) + (310) +
                     (260 - z_position) + (30 + z_position) + 310;
         echo ("z_belt_l", z_belt_l);
-        color([0,0,1]) {
+        color([0,1,0]) {
             translate([od/2 - (z_width/2 - z_insert) - 13/2, 15, 42/2]) rotate([90,0,0]) gt2_belt(260 - z_position);
             translate([od/2 + (z_width/2 - z_insert) + 13/2, 8, od]) rotate([-90,0,0]) gt2_belt(30 + z_position);
             translate([od/2 - (z_width/2 - z_insert) + 13/2, 15, 42/2]) rotate([90,22,0]) gt2_belt(310);
         }
-        color([1,0,0]) {
+        color([0,1,0]) {
             translate([od/2 + (z_width/2 - z_insert) + 13/2, 15+8, 42/2]) rotate([90,0,0]) gt2_belt(260 - z_position);
             translate([od/2 - (z_width/2 - z_insert) - 13/2, 8+8, od]) rotate([-90,0,0]) gt2_belt(30 + z_position);
             translate([od/2 + (z_width/2 - z_insert) - 13/2, 15+8, 42/2]) rotate([90,-22,0]) gt2_belt(310);
