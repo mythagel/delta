@@ -7,8 +7,8 @@ use <e3d_v6_all_metall_hotend.scad>
 od = 300 + 6;   // ID == 300
 z_width = 180;
 
-y_carriage_position = 240;  // 56 - 244
-x_carriage_position = 220;  //56 - 244
+y_carriage_position = 150;  // 56 - 244
+x_carriage_position = 150;  //56 - 244
 z_position = 220;    //48 - 220
 
 module angle(w, h, l, wall) {
@@ -127,8 +127,8 @@ belt_space_od = 13.5;
 module corexy(x, y) {
     all = true;
     frame = true;
-    rails = false;
-    carriages = false;
+    rails = true;
+    carriages = true;
     carriage_y = true;
     carriage_x = true;
     hotend = false;
@@ -239,10 +239,11 @@ module corexy(x, y) {
     
     module x_carriage() {
         x_carriage_w = 25;
-        x_carriage_h = carriage_h+12;
+        x_carriage_h_offset = 0;
+        x_carriage_h = carriage_h+x_carriage_h_offset;
         echo("x_carriage_h", x_carriage_h);
         difference() {
-            translate([0,0,6]) cube([x_carriage_w,carriage_block_width,x_carriage_h], center=true);
+            translate([0,0,x_carriage_h_offset/2]) cube([x_carriage_w,carriage_block_width,x_carriage_h], center=true);
 
             translate([0, -carriage_width/2, 0]) rotate([0,90,0]) cylinder(r=9/2, h=40, center=true);
             translate([0, carriage_width/2, 0]) rotate([0,90,0]) cylinder(r=9/2, h=40, center=true);
@@ -258,16 +259,12 @@ module corexy(x, y) {
             cylinder(r=(16+0.5)/2, h=carriage_h+40, center=true);
         }
         
-        if (false) {
-            belt_clip_h = carriage_h + 14;
-            echo("belt_clip_h", belt_clip_h);
-            translate([-x_carriage_w/2 - 5/2,0, belt_clip_h/2 - carriage_h/2]) cube([5, 12, belt_clip_h], center=true);
-            translate([x_carriage_w/2 + 5/2,0, belt_clip_h/2 - carriage_h/2]) cube([5, 12, belt_clip_h], center=true);
-        } else {
-            translate([x_carriage_w/2 - (5/2)-1, 8, carriage_h/2]) cylinder(r=5/2, h=14);
-            translate([x_carriage_w/2 - (5/2)-1, -8, carriage_h/2]) cylinder(r=5/2, h=14);
-            translate([-x_carriage_w/2 + (5/2)+1, 8, carriage_h/2]) cylinder(r=5/2, h=14);
-            translate([-x_carriage_w/2 + (5/2)+1, -8, carriage_h/2]) cylinder(r=5/2, h=14);
+        // belt mounts
+        union() {
+            translate([x_carriage_w/2 - (5/2)-1, 9, carriage_h/2]) cylinder(r=6/2, h=16);
+            translate([x_carriage_w/2 - (5/2)-1, -9, carriage_h/2]) cylinder(r=6/2, h=16);
+            translate([-x_carriage_w/2 + (5/2)+1, 9, carriage_h/2]) cylinder(r=6/2, h=16);
+            translate([-x_carriage_w/2 + (5/2)+1, -9, carriage_h/2]) cylinder(r=6/2, h=16);
         }
         
         translate([-(x_carriage_w/2) + 5,-carriage_width/2,0]) rotate([0,90,0]) bushing();
@@ -449,7 +446,7 @@ module z_platform() {
 }
 
 union () {
-    all = false;
+    all = true;
     frame = false;
     corexy = true;
     zaxis = false;
@@ -457,7 +454,7 @@ union () {
     echo("frame dimensions: ", od, " x ", od, " x ", od+74);
     upright_h = (od+74) - 25*2;
     echo("upright_h", upright_h);
-    if (all || frame) %frame(od, od, od+75);
+    if (all || frame) frame(od, od, od+75);
     if (all || corexy) translate([3,3,od]) corexy(od, od);
     //translate([3,3, 40]) lower_frame(od, od);
     //rotate([0,0,90]) translate([200+3, -200 - 3, 3]) psu();
