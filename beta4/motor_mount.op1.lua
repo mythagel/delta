@@ -5,9 +5,12 @@ local cam = require("cam")
 -- 5.5 = Nema17 motor mount offset
 nema17_offset = (42 - 31) /2
 move_to(nil, nil, 1);
-move_to(nema17_offset, nema17_offset, nil);
+if argv[2] == "left" then
+    move_to(-42 + nema17_offset, nema17_offset, nil);
+else
+    move_to(nema17_offset, nema17_offset, nil);
+end
 move_to(nil, nil, 0.5);
-
 
 f = 50
 d = 3
